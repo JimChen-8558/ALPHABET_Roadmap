@@ -171,20 +171,19 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 /* ══ Quarter Grid ══ */
 .q-wrap { margin-bottom: 16px; }
 .q-scroll {
-  display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding-bottom: 4px; -ms-overflow-style: none; scrollbar-width: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
 }
-.q-scroll::-webkit-scrollbar { display: none; }
-@media(min-width: 600px)  { .q-scroll { display: grid; grid-template-columns: repeat(2,1fr); overflow-x: visible; scroll-snap-type: none; padding-bottom: 0; } }
+@media(min-width: 600px)  { .q-scroll { grid-template-columns: repeat(2,1fr); } }
 @media(min-width: 900px)  { .q-scroll { grid-template-columns: repeat(4,1fr); } }
 
 .qc {
-  flex-shrink: 0; width: 74vw; max-width: 280px; scroll-snap-align: start;
+  width: 100%; max-width: none; scroll-snap-align: unset;
   border: 1px solid var(--bd); border-radius: var(--r2); overflow: hidden;
   background: var(--surf); transition: border-color .2s, transform .2s;
 }
 .qc:hover { border-color: var(--bd3); transform: translateY(-2px); }
-@media(min-width: 600px) { .qc { width: auto; max-width: none; } }
 
 .qh {
   padding: 8px 14px; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
@@ -208,7 +207,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 .chip.st-dl { border-color: var(--red-bd);   background: var(--red-bg); }
 .chip.st-ea { border-color: var(--blue-bd);  background: var(--blue-bg); }
 
-.chip-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.chip-top  { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
 .chip-mo   { font-size: 10px; color: var(--t2); letter-spacing: .03em; }
 .chip-st   { font-size: 10px; font-weight: 700; letter-spacing: .04em; }
 .chip-nm   { font-size: clamp(13px, 1.3vw, 14px); font-weight: 700; line-height: 1.35; }
@@ -328,9 +327,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 .empty-state-icon { font-size: 32px; margin-bottom: 10px; opacity: .4; }
 
 /* ══ Scroll hint (mobile) ══ */
-.scroll-hint { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--t2); margin-bottom: 6px; }
-.scroll-hint::after { content: '→'; animation: pulse 1.5s infinite; }
-@media(min-width: 600px) { .scroll-hint { display: none; } }
+
 
 /* ══ Mobile readability overrides ══ */
 @media(max-width: 480px) {
@@ -561,8 +558,7 @@ function buildQSec(products, qhcls, ac) {
   const ql = {Q1:'1–3月', Q2:'4–6月', Q3:'7–9月', Q4:'10–12月'};
   const cards = Object.values(map).sort((a,b) => a.yr===b.yr ? a.q.localeCompare(b.q) : a.yr-b.yr);
   return `<div class="q-wrap">
-    <div class="scroll-hint">左右滑動查看各季度</div>
-    <div class="q-scroll">${cards.map(({yr,q,items}) => `
+      <div class="q-scroll">${cards.map(({yr,q,items}) => `
       <div class="qc">
         <div class="qh ${qhcls}">
           <span>${yr} <strong>${q}</strong></span>
