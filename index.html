@@ -294,8 +294,8 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 .pi-time { font-size: 11px; color: var(--t2); margin-top: 6px; }
 
 /* ══ Overview layout ══ */
-.overview-panels { display: grid; grid-template-columns: 1fr; gap: 0; }
-@media(min-width: 900px) { .overview-panels { grid-template-columns: 1fr 1fr; gap: 20px; } }
+.overview-panels { display: flex; flex-direction: column; gap: 0; }
+@media(min-width: 1024px) { .overview-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; } }
 
 /* ══ Filter bar ══ */
 .fr { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; -ms-overflow-style: none; scrollbar-width: none; }
@@ -352,6 +352,32 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
   .qh        { font-size: 12px; padding: 9px 14px; }
   .qm        { font-size: 11px; }
 }
+
+/* ══ Collapsible game list inside chip ══ */
+.chip-gm-toggle {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 10px; color: var(--t2); margin-top: 6px;
+  cursor: pointer; user-select: none; width: fit-content;
+  padding: 3px 7px; border-radius: 4px;
+  background: rgba(255,255,255,.05); border: 1px solid var(--bd2);
+  transition: background .15s;
+}
+.chip-gm-toggle:hover { background: rgba(255,255,255,.09); }
+.chip-gm-toggle .arrow { font-size: 8px; transition: transform .2s; }
+.chip-gm-toggle.open .arrow { transform: rotate(90deg); }
+.chip-gm-list {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows .25s ease;
+}
+.chip-gm-list.open { grid-template-rows: 1fr; }
+.chip-gm-inner { overflow: hidden; }
+.chip-gm-inner div { font-size: 10px; color: var(--t2); padding: 1px 0; line-height: 1.7; }
+@media(max-width:480px) {
+  .chip-gm-toggle { font-size: 11px; }
+  .chip-gm-inner div { font-size: 11px; }
+}
+
+@media(min-width: 1024px) { .overview-divider { display: none; } }
 </style>
 </head>
 <body>
@@ -537,7 +563,14 @@ function buildQSec(products, qhcls, ac) {
             </div>
             <div class="chip-nm">${p.nm}</div>
             <div class="chip-pl" style="color:${ac}">${p.pl||''}</div>
-            ${p.gm&&p.gm.length?`<div class="chip-gm">${p.gm.map(g=>`<div>· ${g}</div>`).join('')}</div>`:''}
+            ${p.gm&&p.gm.length?`
+            <div class="chip-gm-toggle" onclick="event.stopPropagation();toggleGm(this)">
+              <span class="arrow">▶</span><span>${p.gm.length} 款子遊戲</span>
+            </div>
+            <div class="chip-gm-list">
+              <div class="chip-gm-inner">${p.gm.map(g=>`<div>· ${g}</div>`).join('')}</div>
+            </div>
+            `:''}
             ${dotRow(p.id)}
           </div>`;
         }).join('')}</div>
@@ -633,6 +666,7 @@ function render() {
       <div class="sh"><span class="stag stag-law">法規遊戲</span><div class="sline"></div></div>
       ${buildQSec(lawProds,'qh-law','var(--law)')}
     </div>
+    <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);margin:4px 0 16px" class="overview-divider"></div>
     <div>
       <div class="sh"><span class="stag stag-h5">H5 遊戲</span><div class="sline"></div></div>
       ${buildQSec(h5Prods,'qh-h5','var(--h5)')}
@@ -719,6 +753,12 @@ async function init() {
 init();
 tick();
 setInterval(tick, 10000);
+
+window.toggleGm = function(btn) {
+  btn.classList.toggle('open');
+  const list = btn.nextElementSibling;
+  if (list) list.classList.toggle('open');
+};
 </script>
 </body>
 </html>
