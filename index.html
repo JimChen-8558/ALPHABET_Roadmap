@@ -89,7 +89,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
   content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold-bd), transparent);
 }
-.topbar-inner { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-inner { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 6px; }
 
 .brand {
   font-family: 'Bebas Neue', sans-serif;
@@ -105,17 +105,17 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 }
 
 /* Stat cards */
-.stats { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
+.stats { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; }
 .sc {
   background: var(--surf2); border: 1px solid var(--bd); border-radius: 8px;
-  padding: 5px 12px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
-  transition: border-color .2s;
+  padding: 4px 10px; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+  transition: border-color .2s; min-width: 0;
 }
 .sc:hover { border-color: var(--bd3); }
-.sv { font-size: clamp(16px, 2vw, 22px); font-weight: 700; line-height: 1; }
-.sl { font-size: clamp(11px, 1vw, 12px); color: var(--t3); letter-spacing: .05em; text-transform: uppercase; }
+.sv { font-size: clamp(14px, 2vw, 22px); font-weight: 700; line-height: 1; }
+.sl { font-size: clamp(9px, 1vw, 11px); color: var(--t3); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
 
-.clock { font-size: 12px; color: var(--t2); white-space: nowrap; margin-left: auto; display: flex; align-items: center; gap: 5px; }
+.clock { font-size: 12px; color: var(--t2); white-space: nowrap; margin-left: auto; margin-right: 0; display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
 .live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; animation: pulse 2s infinite; }
 
 /* ══ Legend ══ */
@@ -343,8 +343,8 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
   .db-s      { font-size: 13px; }
   .tab-btn   { font-size: 13px; padding: 12px 18px; }
   .fc        { font-size: 13px; padding: 7px 15px; }
-  .sv        { font-size: 20px; }
-  .sl        { font-size: 12px; }
+  .sv        { font-size: 15px; }
+  .sl        { font-size: 9px; }
   .dot       { width: 10px; height: 10px; }
   .qh        { font-size: 12px; padding: 9px 14px; }
   .qm        { font-size: 11px; }
@@ -375,6 +375,14 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 }
 
 @media(min-width: 1024px) { .overview-divider { display: none; } }
+
+/* Stats wrap to second row on narrow screens */
+@media(max-width: 599px) {
+  .topbar-inner { align-items: flex-start; }
+  .brand { order: 1; }
+  .clock { order: 2; margin-left: auto; }
+  .stats { order: 3; width: 100%; flex-wrap: nowrap; }
+}
 </style>
 </head>
 <body>
@@ -389,7 +397,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 <!-- Top Bar -->
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="brand">ALPHABET ROADMAP <em>產品時程看板</em></div>
+    <div class="brand">ALPHABET ROADMAP</div>
     <div class="stats" id="stats">
       <!-- skeleton -->
       <div class="sc"><div class="skeleton sk-line" style="width:60px;height:20px;margin:0"></div></div>
