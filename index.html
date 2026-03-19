@@ -241,36 +241,23 @@ async function fbGet(path) {
 
 // ── Real-time listening via SSE ──
 function startListening() {
-  const es = new EventSource(`${FB_URL}.json?accept=text/event-stream`);
-  es.addEventListener('put', e => {
-    const d = JSON.parse(e.data);
-    if (d.data) {
-      if (d.data.status) fbData = d.data.status;
-      if (d.data.sections) fbSections = d.data.sections;
-    }
-    render();
-    const el = document.getElementById('updated');
-    if (el) el.textContent = '即時同步 ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  });
-  es.addEventListener('patch', e => {
-    const d = JSON.parse(e.data);
-    if (d.data) {
-      if (d.path.startsWith('/status')) {
-        const id = d.path.replace('/status/','');
-        fbData[id] = Object.assign(fbData[id]||{}, d.data);
-      }
-    }
-    render();
-    const el = document.getElementById('updated');
-    if (el) el.textContent = '即時同步 ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  });
-  es.onerror = () => {
-    // fallback: poll every 5s
-    setTimeout(async () => {
+  // 每 3 秒輪詢 Firebase，確保所有環境都能正常同步
+  setInterval(async () => {
+    try {
       const d = await fbGet('');
-      if (d) { if(d.status) fbData=d.status; if(d.sections) fbSections=d.sections; render(); }
-    }, 5000);
-  };
+      if (d !== null) {
+        let changed = false;
+        if (d.status) { fbData = d.status; changed = true; }
+        if (d.sections) { fbSections = d.sections; changed = true; }
+        if (changed) render();
+        const el = document.getElementById('updated');
+        if (el) el.textContent = '同步 ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      }
+    } catch(e) {
+      const el = document.getElementById('updated');
+      if (el) el.textContent = '連線異常，重試中…';
+    }
+  }, 3000);
 }
 
 // ── Helpers ──
