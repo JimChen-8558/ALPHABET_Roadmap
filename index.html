@@ -121,7 +121,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 /* ══ Legend ══ */
 .legend {
   display: none; gap: 14px; align-items: center; flex-wrap: wrap; font-size: 12px; color: var(--t2);
-  padding: 7px var(--pad); border-bottom: 1px solid var(--bd); background: var(--surf);
+  padding: 7px var(--pad); max-width: 1440px; margin: 0 auto; width: 100%;
 }
 @media(min-width: 600px) { .legend { display: flex; } }
 .leg { display: flex; align-items: center; gap: 5px; }
@@ -410,7 +410,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 </div>
 
 <!-- Legend -->
-<div class="legend">
+<div style="background:var(--surf);border-bottom:1px solid var(--bd)"><div class="legend">
   <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>如期</div>
   <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>延期</div>
   <div class="leg"><div class="leg-dot" style="background:var(--blue)"></div>提早</div>
@@ -423,15 +423,15 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
   <div class="leg-div"></div>
   <div class="leg" style="font-size:10px">產品圓點 = 六維度狀態</div>
   <div class="sync-note"><span class="live" id="sync-dot"></span><span id="updated">連線中…</span></div>
-</div>
+</div></div>
 
 <!-- Tab Nav -->
-<nav class="tabnav">
+<nav class="tabnav"><div style="max-width:1440px;margin:0 auto;display:flex;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none">
   <button class="tab-btn on" onclick="go(0)" id="t0">📅 總覽</button>
   <button class="tab-btn" onclick="go(1)" id="t1">⚖️ 法規遊戲</button>
   <button class="tab-btn" onclick="go(2)" id="t2">📱 H5 遊戲</button>
   <button class="tab-btn" onclick="go(3)" id="t3">📋 全部產品</button>
-</nav>
+</div></nav>
 
 <!-- Pages -->
 <div class="content">
