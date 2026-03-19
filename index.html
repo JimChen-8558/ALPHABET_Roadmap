@@ -502,28 +502,29 @@ async function fbGet(path) {
 }
 
 function startListening() {
-  // 追蹤使用者是否正在拖拉或觸控
-  let userScrolling = false;
-  let scrollTimer = null;
-  const markScrolling = () => {
-    userScrolling = true;
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => { userScrolling = false; }, 800);
+  // 追蹤使用者是否正在觸控或滾動
+  let userTouching = false;
+  let touchTimer = null;
+  const markTouch = () => {
+    userTouching = true;
+    clearTimeout(touchTimer);
+    touchTimer = setTimeout(() => { userTouching = false; }, 60000);
   };
-  document.addEventListener('scroll',     markScrolling, {passive: true});
-  document.addEventListener('touchstart', markScrolling, {passive: true});
-  document.addEventListener('touchmove',  markScrolling, {passive: true});
+  document.addEventListener('scroll',     markTouch, {passive: true});
+  document.addEventListener('touchstart', markTouch, {passive: true});
+  document.addEventListener('touchmove',  markTouch, {passive: true});
+  document.addEventListener('mousedown',  markTouch, {passive: true});
 
   setInterval(async () => {
-    // 使用者正在滾動或觸控，跳過這次渲染避免中斷操作
-    if (userScrolling) return;
+    // 使用者正在觸控、滾動或點擊，跳過 render
+    if (userTouching) return;
     try {
       const d = await fbGet('');
       if (d !== null) {
         let changed = false;
         if (d.status)   { fbData = d.status;      changed = true; }
         if (d.sections) { fbSections = d.sections; changed = true; }
-        if (changed) render();
+        if (changed && !userTouching) render();
         const el = document.getElementById('updated');
         if (el) el.textContent = '同步 ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
       }
