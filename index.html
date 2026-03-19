@@ -577,7 +577,7 @@ function buildQSec(products, qhcls, ac) {
           const o = ov(p.id);
           return `<div class="chip ${S.cls[o]}">
             <div class="chip-top">
-              <span class="chip-mo">${p.mo}月出測</span>
+              <span class="chip-mo">${(fbData[p.id]&&fbData[p.id]._month)||p.mo+'月'}出測</span>
               ${o!=='none'?`<span class="chip-st" style="color:${S.color[o]}">${S.label[o]}</span>`:''}
             </div>
             <div class="chip-nm">${p.nm}</div>
@@ -618,7 +618,7 @@ function buildProdList(products) {
           <div class="pi-nm">${p.nm}</div>
           <div class="pi-sub">
             <span class="pi-sub-tag">${p.pl||''}</span>
-            ${p.la?`<span>${p.la}</span>`:''}
+            ${((fbData[p.id]&&fbData[p.id]._launch)||p.la)?`<span>${(fbData[p.id]&&fbData[p.id]._launch)||p.la}</span>`:''}
           </div>
         </div>
         <span class="pi-bd ${S.bdcls[o]}">${S.label[o]}</span>

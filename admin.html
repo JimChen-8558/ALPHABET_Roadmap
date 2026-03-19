@@ -93,6 +93,13 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 60px}
 .saving{animation:pulse .8s infinite}
 
 @media(max-width:600px){header{padding:10px 14px}main{padding:16px 12px 60px}}
+
+.time-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+@media(max-width:500px){.time-row{grid-template-columns:1fr}}
+.time-item{background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:9px 11px}
+.time-lbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.time-inp{width:100%;font-size:12px;padding:6px 8px;border:1px solid var(--bd2);border-radius:6px;background:var(--surf);color:var(--text);font-family:inherit}
+.time-inp:focus{outline:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -310,6 +317,22 @@ function render() {
         </div>
         <div class="card-body ${isOpen?'op':''}" id="body-${p.id}" onclick="event.stopPropagation()">
           <div class="dim-grid">${dims}</div>
+          <div class="time-row">
+            <div class="time-item">
+              <div class="time-lbl">出測月份</div>
+              <input class="time-inp" type="text" placeholder="例：2026/3月"
+                value="${pst._month !== undefined ? pst._month : (p.mo ? p.mo+'月' : p.month||'')}"
+                onchange="setTime('${p.id}','_month',this.value)"
+                onclick="event.stopPropagation()">
+            </div>
+            <div class="time-item">
+              <div class="time-lbl">預計上市時間</div>
+              <input class="time-inp" type="text" placeholder="例：2026/6月上現場"
+                value="${pst._launch !== undefined ? pst._launch : (p.la||'')}"
+                onchange="setTime('${p.id}','_launch',this.value)"
+                onclick="event.stopPropagation()">
+            </div>
+          </div>
           <div class="notes-row">
             <div class="notes-lbl">備註（延期原因、說明）</div>
             <textarea class="notes-ta" placeholder="在此填寫備註…" onchange="setNotes('${p.id}',this.value)">${pst._notes||''}</textarea>
@@ -351,6 +374,20 @@ window.setDim = async function(id, key, val) {
   if (ue) ue.textContent = '最後更新：'+t;
   const sel = document.querySelector(`#card-${id} select[onchange*="'${key}'"]`);
   if (sel) sel.className = 'sel '+({['on-time']:'is-on','delayed':'is-dl','early':'is-ea'}[val]||'');
+};
+
+window.setTime = async function(id, key, val) {
+  setSyncStatus('saving');
+  if (!fbStatus[id]) fbStatus[id] = {};
+  fbStatus[id][key] = val;
+  fbStatus[id]._updatedAt = Date.now();
+  const ok = await fbPatch(`status/${id}`, {[key]: val, _updatedAt: fbStatus[id]._updatedAt});
+  setSyncStatus(ok ? 'ok' : 'err');
+  const t = fmtTime(fbStatus[id]._updatedAt);
+  const te = document.getElementById('time-'+id);
+  const ue = document.getElementById('updated-'+id);
+  if (te) te.textContent = '更新 '+t;
+  if (ue) ue.textContent = '最後更新：'+t;
 };
 
 window.setNotes = async function(id, val) {
