@@ -19,12 +19,12 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
 
-/* Header */
-header{background:var(--surf);border-bottom:1px solid var(--bd);padding:14px 28px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{font-size:15px;font-weight:700;letter-spacing:.02em;margin-right:auto}
+header{background:var(--surf);border-bottom:1px solid var(--bd);padding:14px 28px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-size:15px;font-weight:700;margin-right:auto}
 .logo span{color:var(--t3);font-weight:400;font-size:12px;margin-left:8px}
-.saved{font-size:11px;color:var(--t3);opacity:0;transition:opacity .3s}
-.saved.show{opacity:1}
+.sync-status{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--none-bg);color:var(--t3)}
+.sync-status.ok{background:var(--green-bg);color:var(--green)}
+.sync-status.err{background:var(--red-bg);color:var(--red)}
 .btn{font-size:12px;padding:7px 14px;border-radius:6px;border:1px solid var(--bd2);background:transparent;color:var(--t2);cursor:pointer;font-family:inherit;font-weight:500;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
 .btn:hover{background:var(--bg)}
 .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -32,33 +32,31 @@ header{background:var(--surf);border-bottom:1px solid var(--bd);padding:14px 28p
 .btn-danger{color:var(--red);border-color:var(--red-bd)}
 .btn-danger:hover{background:var(--red-bg)}
 
-/* Main */
 main{max-width:980px;margin:0 auto;padding:24px 20px 60px}
 
-/* Section header */
+.info-bar{background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:12px;color:var(--t2);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.info-bar strong{color:var(--text)}
+
 .sec{display:flex;align-items:center;gap:10px;margin:28px 0 14px}
 .sec:first-child{margin-top:0}
 .sec-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;flex-shrink:0}
 .tag-law{background:#ddeeff;color:#1a4a8b}
 .tag-h5{background:#ddf5ee;color:#0f5c3a}
 .sec-line{flex:1;height:1px;background:var(--bd)}
-.sec-actions{display:flex;gap:6px}
 
-/* Product card */
 .card{background:var(--surf);border:1px solid var(--bd);border-radius:10px;margin-bottom:8px;overflow:hidden;transition:border-color .15s}
 .card:hover{border-color:var(--bd2)}
 .card-head{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none}
 .toggle{color:var(--t3);font-size:10px;transition:transform .2s;flex-shrink:0}
 .toggle.op{transform:rotate(90deg)}
 .card-name{font-weight:500;font-size:13px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-meta{font-size:10px;color:var(--t3);flex-shrink:0;text-align:right;line-height:1.5}
+.card-meta{font-size:10px;color:var(--t3);flex-shrink:0;text-align:right;line-height:1.6}
 .pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;flex-shrink:0}
 .p-on{background:var(--green-bg);color:var(--green)}
 .p-dl{background:var(--red-bg);color:var(--red)}
 .p-ea{background:var(--blue-bg);color:var(--blue)}
 .p-no{background:var(--none-bg);color:var(--none)}
 
-/* Card body */
 .card-body{display:none;border-top:1px solid var(--bd);padding:16px;background:var(--surf2)}
 .card-body.op{display:block}
 .dim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
@@ -66,25 +64,21 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 60px}
 .dim{background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:9px 11px}
 .dim-lbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
 .dim-raw{font-size:11px;color:var(--t3);margin-bottom:7px;min-height:15px}
-.sel{width:100%;font-size:12px;padding:6px 8px;border:1px solid var(--bd2);border-radius:6px;background:var(--surf);color:var(--text);font-family:inherit;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239c9a94'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px}
+.sel{width:100%;font-size:12px;padding:6px 8px;border:1px solid var(--bd2);border-radius:6px;background:var(--surf);color:var(--text);font-family:inherit;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239c9a94'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;transition:all .15s}
 .sel:focus{outline:none;border-color:var(--accent)}
 .sel.is-on{border-color:#7bbf7b;background-color:var(--green-bg)}
 .sel.is-dl{border-color:#e07070;background-color:var(--red-bg)}
 .sel.is-ea{border-color:#7099dd;background-color:var(--blue-bg)}
 
-/* Notes */
 .notes-row{margin-bottom:10px}
 .notes-lbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
 .notes-ta{width:100%;font-size:12px;padding:8px 10px;border:1px solid var(--bd2);border-radius:6px;background:var(--surf);color:var(--text);font-family:inherit;resize:vertical;min-height:58px;line-height:1.5}
 .notes-ta:focus{outline:none;border-color:var(--accent)}
 
-/* Updated time */
-.updated-row{font-size:10px;color:var(--t3);display:flex;align-items:center;justify-content:space-between;margin-top:4px}
-
-/* Card footer actions */
+.updated-row{font-size:10px;color:var(--t3);margin-top:4px}
 .card-footer{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:10px 14px;border-top:1px solid var(--bd);background:var(--surf)}
 
-/* Add product modal */
+/* Modal */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:100;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
 .modal{background:var(--surf);border-radius:12px;border:1px solid var(--bd2);padding:24px;width:400px;max-width:95vw;box-shadow:0 8px 32px rgba(0,0,0,.12)}
@@ -95,64 +89,41 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 60px}
 .form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--accent)}
 .modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
 
-/* Export bar */
-.export-bar{background:var(--surf);border:1px solid var(--bd);border-radius:8px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.export-bar-lbl{font-size:12px;color:var(--t2);flex:1}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.saving{animation:pulse .8s infinite}
 
-@media(max-width:600px){
-  header{padding:10px 14px}
-  main{padding:16px 12px 60px}
-}
+@media(max-width:600px){header{padding:10px 14px}main{padding:16px 12px 60px}}
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">產品狀態管理 <span>後台</span></div>
-  <span class="saved" id="saved">✓ 已儲存</span>
+  <span class="sync-status" id="sync-status">連線中…</span>
   <button class="btn" onclick="exportCSV()">⬇ 匯出 CSV</button>
-  <a href="display.html" target="_blank" class="btn btn-primary">↗ 開啟前台</a>
+  <a href="index.html" target="_blank" class="btn btn-primary">↗ 開啟前台</a>
 </header>
 
 <main>
-  <div class="export-bar">
-    <span class="export-bar-lbl">💡 點開產品卡片可設定各維度狀態、填寫備註，每次更改自動儲存並記錄時間</span>
+  <div class="info-bar">
+    💡 狀態更新後會<strong>即時同步</strong>到 Firebase，所有人的前台立即看到變更
   </div>
-
-  <div id="main-content"></div>
+  <div id="main-content"><div style="text-align:center;padding:60px 20px;color:var(--t3)">資料載入中…</div></div>
 </main>
 
-<!-- Add Product Modal -->
 <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
   <div class="modal">
-    <h3 id="modal-title">新增產品</h3>
-    <div class="form-row">
-      <label>產品名稱</label>
-      <input type="text" id="f-name" placeholder="例：(D27) 雙龍發">
+    <h3>新增產品</h3>
+    <div class="form-row"><label>產品名稱</label><input type="text" id="f-name" placeholder="例：(D27) 雙龍發"></div>
+    <div class="form-row"><label>分類</label>
+      <select id="f-section"><option value="law">法規遊戲</option><option value="h5">H5 遊戲</option></select>
     </div>
-    <div class="form-row">
-      <label>分類</label>
-      <select id="f-section">
-        <option value="law">法規遊戲</option>
-        <option value="h5">H5 遊戲</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <label>平台／類型</label>
-      <input type="text" id="f-platform" placeholder="例：D27 / APOLLO / 主流 / 彩金">
-    </div>
-    <div class="form-row">
-      <label>預計出測月份</label>
-      <input type="text" id="f-month" placeholder="例：2026/3月">
-    </div>
-    <div class="form-row">
-      <label>預計上市時間</label>
-      <input type="text" id="f-launch" placeholder="例：2026/6月（選填）">
-    </div>
-    <div class="form-row">
-      <label>子遊戲（用頓號分隔）</label>
-      <textarea id="f-games" rows="2" placeholder="例：金龍迎財、好運財神（選填）"></textarea>
-    </div>
+    <div class="form-row"><label>平台／類型</label><input type="text" id="f-platform" placeholder="例：D27 / APOLLO / 主流 / 彩金"></div>
+    <div class="form-row"><label>預計出測月份</label><input type="text" id="f-month" placeholder="例：2026/3月"></div>
+    <div class="form-row"><label>出測年份</label><input type="number" id="f-yr" placeholder="例：2026" value="2026"></div>
+    <div class="form-row"><label>出測月（數字）</label><input type="number" id="f-mo" placeholder="例：3" min="1" max="12"></div>
+    <div class="form-row"><label>預計上市時間（選填）</label><input type="text" id="f-launch" placeholder="例：2026/6月"></div>
+    <div class="form-row"><label>子遊戲，頓號分隔（選填）</label><textarea id="f-games" rows="2" placeholder="例：金龍迎財、好運財神"></textarea></div>
     <div class="modal-btns">
       <button class="btn" onclick="closeModal()">取消</button>
       <button class="btn btn-primary" onclick="saveNewProduct()">新增</button>
@@ -161,73 +132,119 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 60px}
 </div>
 
 <script>
+const FB_URL = 'https://alphabet-roadmap-b24b1-default-rtdb.asia-southeast1.firebasedatabase.app';
+
 const DIMS = [
   {key:'planning',label:'企劃'},{key:'math',label:'機率'},
   {key:'art',label:'美術'},{key:'program',label:'程式'},
   {key:'qa',label:'品保'},{key:'cert',label:'送驗'},
 ];
 
-// Default product list
 const DEFAULT_SECTIONS = [
   {
-    id:'law', label:'法規遊戲', tagClass:'tag-law',
+    id:'law',label:'法規遊戲',tagClass:'tag-law',order:0,
     products:[
-      {id:'l16',name:'(D27) 滿意發',month:'2025/5月',launch:'2025/11月上現場',platform:'D27',planning:'完成',math:'完成',art:'完成',program:'完成',qa:'完成',cert:'2025/6月拿到Letter',games:'好運財神、金龍迎財、榮華富貴、金獅納福'},
-      {id:'l21',name:'(D27) 龍來發',month:'2025/8月',launch:'2025/12月上現場',platform:'D27',planning:'完成',math:'完成',art:'完成',program:'完成',qa:'GLI測試修改',cert:'預期10月拿Letter',games:'金凰飛舞、金龍呈祥、熊貓當家、花好月圓'},
-      {id:'l26',name:'(D27) 金來發',month:'2025/10月',launch:'2025/12月上現場',platform:'D27',planning:'完成',math:'完成',art:'完成',program:'完成',qa:'測試進行中',cert:'預計9月送GLI',games:'皇朝盛世、皇朝美人、金龍獻寶、金鳳展翅'},
-      {id:'l31',name:'(D27) 金龍發',month:'2026/1月',launch:'',platform:'D27',planning:'製作中',math:'製作中',art:'製作中',program:'製作中',qa:'尚未開始',cert:'',games:'金富財神、吉祥公主、金海龍王、金猴獻瑞'},
-      {id:'l36',name:'(D27) 福來發',month:'2026/4月',launch:'',platform:'D27',planning:'製作中',math:'製作中',art:'完成',program:'製作中',qa:'尚未開始',cert:'',games:'龍來發財、鳳來富貴、金將熊貓、財源滾滾'},
-      {id:'l41',name:'(APOLLO) 好運發',month:'2026/8月',launch:'',platform:'APOLLO',planning:'製作中',math:'製作中',art:'製作中',program:'尚未開始',qa:'尚未開始',cert:'',games:'滿運金龍、幸運金鳳、福將到來、金玉佳人'},
-      {id:'l99',name:'(APOLLO) 轉轉發',month:'2026/11月',launch:'',platform:'APOLLO',planning:'尚未開始',math:'尚未開始',art:'尚未開始',program:'尚未開始',qa:'尚未開始',cert:'',games:'財神賜福、金龍寶庫、富貴女將、福運金豬'},
+      {id:'l16',yr:2025,mo:5,pl:'D27',nm:'(D27) 滿意發',la:'2025/11月上現場',rawPlanning:'完成',rawMath:'完成',rawArt:'完成',rawProgram:'完成',rawQa:'完成',rawCert:'2025/6月拿到Letter',gm:['好運財神','金龍迎財','榮華富貴','金獅納福']},
+      {id:'l21',yr:2025,mo:8,pl:'D27',nm:'(D27) 龍來發',la:'2025/12月上現場',rawPlanning:'完成',rawMath:'完成',rawArt:'完成',rawProgram:'完成',rawQa:'GLI測試修改',rawCert:'預期10月拿Letter',gm:['金凰飛舞','金龍呈祥','熊貓當家','花好月圓']},
+      {id:'l26',yr:2025,mo:10,pl:'D27',nm:'(D27) 金來發',la:'2025/12月上現場',rawPlanning:'完成',rawMath:'完成',rawArt:'完成',rawProgram:'完成',rawQa:'測試進行中',rawCert:'預計9月送GLI',gm:['皇朝盛世','皇朝美人','金龍獻寶','金鳳展翅']},
+      {id:'l31',yr:2026,mo:1,pl:'D27',nm:'(D27) 金龍發',la:'',rawPlanning:'製作中',rawMath:'製作中',rawArt:'製作中',rawProgram:'製作中',rawQa:'尚未開始',rawCert:'',gm:['金富財神','吉祥公主','金海龍王','金猴獻瑞']},
+      {id:'l36',yr:2026,mo:4,pl:'D27',nm:'(D27) 福來發',la:'',rawPlanning:'製作中',rawMath:'製作中',rawArt:'完成',rawProgram:'製作中',rawQa:'尚未開始',rawCert:'',gm:['龍來發財','鳳來富貴','金將熊貓','財源滾滾']},
+      {id:'l41',yr:2026,mo:8,pl:'APOLLO',nm:'(APOLLO) 好運發',la:'',rawPlanning:'製作中',rawMath:'製作中',rawArt:'製作中',rawProgram:'尚未開始',rawQa:'尚未開始',rawCert:'',gm:['滿運金龍','幸運金鳳','福將到來','金玉佳人']},
+      {id:'l99',yr:2026,mo:11,pl:'APOLLO',nm:'(APOLLO) 轉轉發',la:'',rawPlanning:'尚未開始',rawMath:'尚未開始',rawArt:'尚未開始',rawProgram:'尚未開始',rawQa:'尚未開始',rawCert:'',gm:['財神賜福','金龍寶庫','富貴女將','福運金豬']},
     ]
   },
   {
-    id:'h5', label:'H5 遊戲', tagClass:'tag-h5',
+    id:'h5',label:'H5 遊戲',tagClass:'tag-h5',order:1,
     products:[
-      {id:'h116',name:'(彩金) 滿意發系列',month:'2025/12月',launch:'',platform:'彩金',planning:'完成',math:'完成',art:'完成',program:'完成',qa:'完成',cert:'',games:'好運財神、金龍迎財、榮華富貴、金獅納福'},
-      {id:'h202',name:'(主流) Super Chess 王牌棋士',month:'2026/2月',launch:'2026/2月',platform:'主流',planning:'完成',math:'完成',art:'製作中',program:'製作中',qa:'尚未開始',cert:'',games:''},
-      {id:'h203',name:'(彩金) 金來發 · 皇朝盛世',month:'2026/3月',launch:'2026/3月',platform:'彩金',planning:'完成',math:'完成',art:'完成',program:'完成',qa:'測試進行中',cert:'',games:''},
-      {id:'h204',name:'(彩金) 金來發 · 皇朝美人',month:'2026/4月',launch:'2026/4月',platform:'彩金',planning:'完成',math:'調整中',art:'完成',program:'完成',qa:'測試進行中',cert:'',games:''},
-      {id:'h205',name:'(主流) Sugar Pop 糖果派對',month:'2026/5月',launch:'2026/5月',platform:'主流',planning:'製作中',math:'製作中',art:'製作中',program:'尚未開始',qa:'尚未開始',cert:'',games:''},
-      {id:'h206',name:'(彩金) 龍來發 · 花好月圓',month:'2026/6月',launch:'2026/6月',platform:'彩金',planning:'完成',math:'N/A',art:'完成',program:'完成',qa:'GLI測試修改',cert:'',games:''},
-      {id:'h207',name:"(主流) Witch's Magic 小魔女",month:'2026/7月',launch:'2026/7月',platform:'主流',planning:'製作中',math:'製作中',art:'製作中',program:'尚未開始',qa:'尚未開始',cert:'',games:''},
-      {id:'h208',name:'(彩金) 龍來發 · 金鳳飛舞',month:'2026/8月',launch:'2026/8月',platform:'彩金',planning:'完成',math:'N/A',art:'完成',program:'完成',qa:'GLI測試修改',cert:'',games:''},
-      {id:'h209',name:'(彩金) 金龍發 · 金海龍王',month:'2026/9月',launch:'2026/9月',platform:'彩金',planning:'N/A',math:'N/A',art:'完成',program:'尚未開始',qa:'尚未開始',cert:'',games:''},
-      {id:'h210',name:'(主流) Funky APE 放克猿',month:'2026/10月',launch:'2026/10月',platform:'主流',planning:'製作中',math:'製作中',art:'製作中',program:'尚未開始',qa:'尚未開始',cert:'',games:''},
-      {id:'h211',name:'(彩金) 金龍發 · 金猴獻瑞',month:'2026/11月',launch:'2026/11月',platform:'彩金',planning:'N/A',math:'N/A',art:'完成',program:'尚未開始',qa:'尚未開始',cert:'',games:''},
-      {id:'h212',name:'(彩金) 福來發 · 財源滾滾',month:'2026/12月',launch:'2026/12月',platform:'彩金',planning:'N/A',math:'N/A',art:'完成',program:'尚未開始',qa:'尚未開始',cert:'',games:''},
+      {id:'h116',yr:2025,mo:12,pl:'彩金',nm:'(彩金) 滿意發系列',la:'',rawPlanning:'完成',rawMath:'完成',rawArt:'完成',rawProgram:'完成',rawQa:'完成',rawCert:'',gm:['好運財神','金龍迎財','榮華富貴','金獅納福']},
+      {id:'h202',yr:2026,mo:2,pl:'主流',nm:'(主流) Super Chess 王牌棋士',la:'2026/2月',rawPlanning:'完成',rawMath:'完成',rawArt:'製作中',rawProgram:'製作中',rawQa:'尚未開始',rawCert:'',gm:[]},
+      {id:'h203',yr:2026,mo:3,pl:'彩金',nm:'(彩金) 金來發·皇朝盛世',la:'2026/3月',rawPlanning:'完成',rawMath:'完成',rawArt:'完成',rawProgram:'完成',rawQa:'測試進行中',rawCert:'',gm:[]},
+      {id:'h204',yr:2026,mo:4,pl:'彩金',nm:'(彩金) 金來發·皇朝美人',la:'2026/4月',rawPlanning:'完成',rawMath:'調整中',rawArt:'完成',rawProgram:'完成',rawQa:'測試進行中',rawCert:'',gm:[]},
+      {id:'h205',yr:2026,mo:5,pl:'主流',nm:'(主流) Sugar Pop 糖果派對',la:'2026/5月',rawPlanning:'製作中',rawMath:'製作中',rawArt:'製作中',rawProgram:'尚未開始',rawQa:'尚未開始',rawCert:'',gm:[]},
+      {id:'h206',yr:2026,mo:6,pl:'彩金',nm:'(彩金) 龍來發·花好月圓',la:'2026/6月',rawPlanning:'完成',rawMath:'N/A',rawArt:'完成',rawProgram:'完成',rawQa:'GLI測試修改',rawCert:'',gm:[]},
+      {id:'h207',yr:2026,mo:7,pl:'主流',nm:"(主流) Witch's Magic 小魔女",la:'2026/7月',rawPlanning:'製作中',rawMath:'製作中',rawArt:'製作中',rawProgram:'尚未開始',rawQa:'尚未開始',rawCert:'',gm:[]},
+      {id:'h208',yr:2026,mo:8,pl:'彩金',nm:'(彩金) 龍來發·金鳳飛舞',la:'2026/8月',rawPlanning:'完成',rawMath:'N/A',rawArt:'完成',rawProgram:'完成',rawQa:'GLI測試修改',rawCert:'',gm:[]},
+      {id:'h209',yr:2026,mo:9,pl:'彩金',nm:'(彩金) 金龍發·金海龍王',la:'2026/9月',rawPlanning:'N/A',rawMath:'N/A',rawArt:'完成',rawProgram:'尚未開始',rawQa:'尚未開始',rawCert:'',gm:[]},
+      {id:'h210',yr:2026,mo:10,pl:'主流',nm:'(主流) Funky APE 放克猿',la:'2026/10月',rawPlanning:'製作中',rawMath:'製作中',rawArt:'製作中',rawProgram:'尚未開始',rawQa:'尚未開始',rawCert:'',gm:[]},
+      {id:'h211',yr:2026,mo:11,pl:'彩金',nm:'(彩金) 金龍發·金猴獻瑞',la:'2026/11月',rawPlanning:'N/A',rawMath:'N/A',rawArt:'完成',rawProgram:'尚未開始',rawQa:'尚未開始',rawCert:'',gm:[]},
+      {id:'h212',yr:2026,mo:12,pl:'彩金',nm:'(彩金) 福來發·財源滾滾',la:'2026/12月',rawPlanning:'N/A',rawMath:'N/A',rawArt:'完成',rawProgram:'尚未開始',rawQa:'尚未開始',rawCert:'',gm:[]},
     ]
   }
 ];
 
-const SK = 'roadmap_status_v1';
-const PK = 'roadmap_products_v1';
+let fbStatus = {};
+let fbSections = null;
 let openCards = new Set();
 
-// Load / Save
-function loadSt() { try { return JSON.parse(localStorage.getItem(SK)) || {}; } catch { return {}; } }
-function saveSt(st) {
-  localStorage.setItem(SK, JSON.stringify(st));
-  showSaved();
-}
-function loadProds() {
+// ── Firebase REST ──
+async function fbGet(path) {
   try {
-    const p = JSON.parse(localStorage.getItem(PK));
-    return p || DEFAULT_SECTIONS;
-  } catch { return DEFAULT_SECTIONS; }
+    const r = await fetch(`${FB_URL}/${path}.json`);
+    return r.ok ? r.json() : null;
+  } catch { return null; }
 }
-function saveProds(p) { localStorage.setItem(PK, JSON.stringify(p)); }
-
-function showSaved() {
-  const el = document.getElementById('saved');
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.classList.remove('show'), 2000);
+async function fbSet(path, data) {
+  try {
+    const r = await fetch(`${FB_URL}/${path}.json`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    return r.ok;
+  } catch { return false; }
+}
+async function fbPatch(path, data) {
+  try {
+    const r = await fetch(`${FB_URL}/${path}.json`, {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    return r.ok;
+  } catch { return false; }
 }
 
-// Status helpers
-function overall(id, st) {
-  const v = DIMS.map(d => (st[id]||{})[d.key]||'');
+function setSyncStatus(state) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  if (state === 'ok')  { el.className='sync-status ok'; el.textContent='● 已同步'; }
+  if (state === 'saving') { el.className='sync-status saving'; el.textContent='↑ 儲存中…'; }
+  if (state === 'err') { el.className='sync-status err'; el.textContent='✕ 同步失敗'; }
+  if (state === 'live') { el.className='sync-status ok'; el.textContent='● 即時連線'; }
+}
+
+// ── Real-time listening ──
+function startListening() {
+  const es = new EventSource(`${FB_URL}.json?accept=text/event-stream`);
+  es.addEventListener('put', e => {
+    const d = JSON.parse(e.data);
+    if (d.data) {
+      if (d.data.status) fbStatus = d.data.status;
+      if (d.data.sections) fbSections = d.data.sections;
+    }
+    setSyncStatus('live');
+    render();
+  });
+  es.addEventListener('patch', e => {
+    const d = JSON.parse(e.data);
+    if (d.data && d.path.startsWith('/status/')) {
+      const id = d.path.replace('/status/','');
+      fbStatus[id] = Object.assign(fbStatus[id]||{}, d.data);
+      setSyncStatus('live');
+      render();
+    }
+  });
+  es.onerror = () => setSyncStatus('err');
+}
+
+function getSections() {
+  if (!fbSections) return DEFAULT_SECTIONS;
+  return Object.values(fbSections).sort((a,b)=>(a.order||0)-(b.order||0));
+}
+
+// ── Status helpers ──
+function overall(id) {
+  const v = DIMS.map(d => (fbStatus[id]||{})[d.key]||'');
   if (v.every(x=>x==='')) return 'none';
   if (v.some(x=>x==='delayed')) return 'delayed';
   if (v.some(x=>x==='early')) return 'early';
@@ -235,41 +252,36 @@ function overall(id, st) {
 }
 const pillCls = {'on-time':'p-on','delayed':'p-dl','early':'p-ea','none':'p-no'};
 const pillLbl = {'on-time':'如期','delayed':'延期','early':'提早','none':'未設定'};
-const selCls  = {'on-time':'is-on','delayed':'is-dl','early':'is-ea',''  :''};
+const selCls  = {'on-time':'is-on','delayed':'is-dl','early':'is-ea'};
 
 function fmtTime(ts) {
   if (!ts) return '';
-  const d = new Date(ts);
-  return d.toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  return new Date(ts).toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 
-// Render
+// ── Render ──
 function render() {
-  const st = loadSt();
-  const sections = loadProds();
+  const sections = getSections();
   let html = '';
-
   sections.forEach(sec => {
     html += `<div class="sec">
       <span class="sec-tag ${sec.tagClass}">${sec.label}</span>
       <div class="sec-line"></div>
-      <div class="sec-actions">
-        <button class="btn" onclick="openModal('${sec.id}')">＋ 新增產品</button>
-      </div>
+      <button class="btn" onclick="openModal('${sec.id}')">＋ 新增產品</button>
     </div>`;
 
-    sec.products.forEach(p => {
-      const ov = overall(p.id, st);
+    (sec.products||[]).forEach(p => {
+      const ov = overall(p.id);
       const isOpen = openCards.has(p.id);
-      const pst = st[p.id] || {};
+      const pst = fbStatus[p.id] || {};
       const updatedAt = pst._updatedAt ? fmtTime(pst._updatedAt) : '';
-      const notes = pst._notes || '';
 
       const dims = DIMS.map(d => {
-        const val = pst[d.key] || '';
+        const val = pst[d.key]||'';
+        const raw = p[`raw${d.key.charAt(0).toUpperCase()+d.key.slice(1)}`]||p[d.key]||'—';
         return `<div class="dim">
           <div class="dim-lbl">${d.label}</div>
-          <div class="dim-raw">${p[d.key] || '—'}</div>
+          <div class="dim-raw">${raw}</div>
           <select class="sel ${selCls[val]||''}" onchange="setDim('${p.id}','${d.key}',this.value)" onclick="event.stopPropagation()">
             <option value="">— 未設定</option>
             <option value="on-time" ${val==='on-time'?'selected':''}>如期</option>
@@ -282,137 +294,132 @@ function render() {
       html += `<div class="card" id="card-${p.id}">
         <div class="card-head" onclick="toggleCard('${p.id}')">
           <span class="toggle ${isOpen?'op':''}">▶</span>
-          <span class="card-name">${p.name}</span>
-          ${p.month ? `<span style="font-size:10px;color:var(--t3);background:var(--bg);padding:2px 7px;border-radius:4px;flex-shrink:0">${p.month}</span>` : ''}
+          <span class="card-name">${p.nm||p.name}</span>
+          ${(p.mo||p.month)?`<span style="font-size:10px;color:var(--t3);background:var(--bg);padding:2px 7px;border-radius:4px;flex-shrink:0">${p.mo?p.mo+'月':p.month}</span>`:''}
           <div class="card-meta">
             <span class="pill ${pillCls[ov]}" id="pill-${p.id}">${pillLbl[ov]}</span>
-            ${updatedAt ? `<div style="margin-top:3px" id="time-${p.id}">更新 ${updatedAt}</div>` : `<div id="time-${p.id}"></div>`}
+            <div id="time-${p.id}" style="margin-top:2px">${updatedAt?'更新 '+updatedAt:''}</div>
           </div>
         </div>
         <div class="card-body ${isOpen?'op':''}" id="body-${p.id}" onclick="event.stopPropagation()">
           <div class="dim-grid">${dims}</div>
           <div class="notes-row">
             <div class="notes-lbl">備註（延期原因、說明）</div>
-            <textarea class="notes-ta" placeholder="在此填寫備註…" onchange="setNotes('${p.id}',this.value)">${notes}</textarea>
+            <textarea class="notes-ta" placeholder="在此填寫備註…" onchange="setNotes('${p.id}',this.value)">${pst._notes||''}</textarea>
           </div>
-          <div class="updated-row">
-            <span id="updated-${p.id}">${updatedAt ? '最後更新：' + updatedAt : '尚未設定狀態'}</span>
-          </div>
+          <div class="updated-row" id="updated-${p.id}">${updatedAt?'最後更新：'+updatedAt:'尚未設定狀態'}</div>
         </div>
-        <div class="card-footer ${isOpen?'':'hidden'}">
+        <div class="card-footer" style="display:${isOpen?'flex':'none'}">
           <button class="btn btn-danger" onclick="deleteProduct('${sec.id}','${p.id}')">🗑 刪除產品</button>
         </div>
       </div>`;
     });
   });
-
   document.getElementById('main-content').innerHTML = html;
 }
 
-// Toggle card
+// ── Actions ──
 window.toggleCard = function(id) {
-  if (openCards.has(id)) openCards.delete(id);
-  else openCards.add(id);
+  if (openCards.has(id)) openCards.delete(id); else openCards.add(id);
   render();
 };
 
-// Set dimension status
-window.setDim = function(id, key, val) {
-  const st = loadSt();
-  if (!st[id]) st[id] = {};
-  st[id][key] = val;
-  st[id]._updatedAt = Date.now();
-  saveSt(st);
+window.setDim = async function(id, key, val) {
+  setSyncStatus('saving');
+  if (!fbStatus[id]) fbStatus[id] = {};
+  fbStatus[id][key] = val;
+  fbStatus[id]._updatedAt = Date.now();
 
-  // Update in place
-  const sel = document.querySelector(`#card-${id} select[onchange*="${key}"]`);
-  if (sel) sel.className = 'sel ' + (selCls[val]||'');
-  const ov = overall(id, st);
-  const pill = document.getElementById('pill-' + id);
-  if (pill) { pill.className = `pill ${pillCls[ov]}`; pill.textContent = pillLbl[ov]; }
-  const timeEls = [document.getElementById('time-'+id), document.getElementById('updated-'+id)];
-  const t = fmtTime(st[id]._updatedAt);
-  if (timeEls[0]) timeEls[0].textContent = '更新 ' + t;
-  if (timeEls[1]) timeEls[1].textContent = '最後更新：' + t;
+  const ok = await fbPatch(`status/${id}`, {[key]: val, _updatedAt: fbStatus[id]._updatedAt});
+  setSyncStatus(ok ? 'ok' : 'err');
+
+  // Update UI in place
+  const ov = overall(id);
+  const pill = document.getElementById('pill-'+id);
+  if (pill) { pill.className=`pill ${pillCls[ov]}`; pill.textContent=pillLbl[ov]; }
+  const t = fmtTime(fbStatus[id]._updatedAt);
+  const te = document.getElementById('time-'+id);
+  const ue = document.getElementById('updated-'+id);
+  if (te) te.textContent = '更新 '+t;
+  if (ue) ue.textContent = '最後更新：'+t;
+  const sel = document.querySelector(`#card-${id} select[onchange*="'${key}'"]`);
+  if (sel) sel.className = 'sel '+({['on-time']:'is-on','delayed':'is-dl','early':'is-ea'}[val]||'');
 };
 
-// Set notes
-window.setNotes = function(id, val) {
-  const st = loadSt();
-  if (!st[id]) st[id] = {};
-  st[id]._notes = val;
-  st[id]._updatedAt = Date.now();
-  saveSt(st);
-  const t = fmtTime(st[id]._updatedAt);
-  const u = document.getElementById('updated-' + id);
-  if (u) u.textContent = '最後更新：' + t;
-  const tm = document.getElementById('time-' + id);
-  if (tm) tm.textContent = '更新 ' + t;
+window.setNotes = async function(id, val) {
+  setSyncStatus('saving');
+  if (!fbStatus[id]) fbStatus[id] = {};
+  fbStatus[id]._notes = val;
+  fbStatus[id]._updatedAt = Date.now();
+  const ok = await fbPatch(`status/${id}`, {_notes: val, _updatedAt: fbStatus[id]._updatedAt});
+  setSyncStatus(ok ? 'ok' : 'err');
+  const t = fmtTime(fbStatus[id]._updatedAt);
+  const te = document.getElementById('time-'+id);
+  const ue = document.getElementById('updated-'+id);
+  if (te) te.textContent = '更新 '+t;
+  if (ue) ue.textContent = '最後更新：'+t;
 };
 
-// Delete product
-window.deleteProduct = function(secId, prodId) {
+window.deleteProduct = async function(secId, prodId) {
   if (!confirm('確定要刪除這個產品嗎？')) return;
-  const sections = loadProds();
-  const sec = sections.find(s => s.id === secId);
-  if (sec) sec.products = sec.products.filter(p => p.id !== prodId);
-  saveProds(sections);
-  openCards.delete(prodId);
-  showSaved();
-  render();
+  const sections = getSections();
+  const sec = sections.find(s=>s.id===secId);
+  if (sec) sec.products = (sec.products||[]).filter(p=>p.id!==prodId);
+  setSyncStatus('saving');
+  const ok = await fbSet('sections', Object.fromEntries(sections.map(s=>[s.id,s])));
+  setSyncStatus(ok?'ok':'err');
+  if (ok) { fbSections = Object.fromEntries(sections.map(s=>[s.id,s])); openCards.delete(prodId); render(); }
 };
 
-// Modal
 let modalSecId = null;
 window.openModal = function(secId) {
   modalSecId = secId;
-  document.getElementById('modal-title').textContent = '新增產品';
-  document.getElementById('f-name').value = '';
+  ['f-name','f-platform','f-month','f-launch','f-games'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-section').value = secId;
-  document.getElementById('f-platform').value = '';
-  document.getElementById('f-month').value = '';
-  document.getElementById('f-launch').value = '';
-  document.getElementById('f-games').value = '';
+  document.getElementById('f-yr').value = 2026;
+  document.getElementById('f-mo').value = '';
   document.getElementById('modal-bg').classList.add('open');
-  setTimeout(() => document.getElementById('f-name').focus(), 100);
+  setTimeout(()=>document.getElementById('f-name').focus(),100);
 };
-window.closeModal = function() {
-  document.getElementById('modal-bg').classList.remove('open');
-};
-window.saveNewProduct = function() {
+window.closeModal = function() { document.getElementById('modal-bg').classList.remove('open'); };
+
+window.saveNewProduct = async function() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { alert('請輸入產品名稱'); return; }
   const secId = document.getElementById('f-section').value;
-  const sections = loadProds();
-  const sec = sections.find(s => s.id === secId);
+  const sections = getSections();
+  const sec = sections.find(s=>s.id===secId);
   if (!sec) return;
-  const newId = secId[0] + Date.now();
-  sec.products.push({
-    id: newId,
-    name,
-    platform: document.getElementById('f-platform').value.trim(),
-    month: document.getElementById('f-month').value.trim(),
-    launch: document.getElementById('f-launch').value.trim(),
-    games: document.getElementById('f-games').value.trim(),
-    planning:'',math:'',art:'',program:'',qa:'',cert:'',
-  });
-  saveProds(sections);
-  showSaved();
-  closeModal();
-  render();
+
+  const gamesRaw = document.getElementById('f-games').value.trim();
+  const newProd = {
+    id: secId[0] + Date.now(),
+    nm: name,
+    pl: document.getElementById('f-platform').value.trim(),
+    yr: parseInt(document.getElementById('f-yr').value)||2026,
+    mo: parseInt(document.getElementById('f-mo').value)||0,
+    la: document.getElementById('f-launch').value.trim(),
+    gm: gamesRaw ? gamesRaw.split('、').map(g=>g.trim()).filter(Boolean) : [],
+  };
+
+  if (!sec.products) sec.products = [];
+  sec.products.push(newProd);
+
+  setSyncStatus('saving');
+  const ok = await fbSet('sections', Object.fromEntries(sections.map(s=>[s.id,s])));
+  setSyncStatus(ok?'ok':'err');
+  if (ok) { fbSections = Object.fromEntries(sections.map(s=>[s.id,s])); closeModal(); render(); }
 };
 
-// Export CSV
 window.exportCSV = function() {
-  const st = loadSt();
-  const sections = loadProds();
+  const sections = getSections();
   const rows = [['分類','產品名稱','平台','出測月份','上市時間','企劃','機率','美術','程式','品保','送驗','整體狀態','備註','最後更新']];
-  sections.forEach(sec => {
-    sec.products.forEach(p => {
-      const pst = st[p.id] || {};
-      const ov = overall(p.id, st);
+  sections.forEach(sec=>{
+    (sec.products||[]).forEach(p=>{
+      const pst=fbStatus[p.id]||{};
+      const ov=overall(p.id);
       rows.push([
-        sec.label, p.name, p.platform||'', p.month||'', p.launch||'',
+        sec.label, p.nm||p.name, p.pl||'', p.mo?p.mo+'月':(p.month||''), p.la||'',
         pillLbl[pst.planning||'none']||'未設定',
         pillLbl[pst.math||'none']||'未設定',
         pillLbl[pst.art||'none']||'未設定',
@@ -421,18 +428,35 @@ window.exportCSV = function() {
         pillLbl[pst.cert||'none']||'未設定',
         pillLbl[ov],
         (pst._notes||'').replace(/\n/g,' '),
-        pst._updatedAt ? fmtTime(pst._updatedAt) : '',
+        pst._updatedAt?fmtTime(pst._updatedAt):'',
       ]);
     });
   });
-  const csv = '\uFEFF' + rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const csv = '\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
   a.download = `產品狀態_${new Date().toLocaleDateString('zh-TW').replace(/\//g,'-')}.csv`;
   a.click();
 };
 
-render();
+// ── Init ──
+async function init() {
+  const d = await fbGet('');
+  if (d) {
+    if (d.status) fbStatus = d.status;
+    if (d.sections) fbSections = d.sections;
+    else {
+      // First time: write default sections to Firebase
+      await fbSet('sections', Object.fromEntries(DEFAULT_SECTIONS.map(s=>[s.id,s])));
+      fbSections = Object.fromEntries(DEFAULT_SECTIONS.map(s=>[s.id,s]));
+    }
+  }
+  setSyncStatus('live');
+  render();
+  startListening();
+}
+
+init();
 </script>
 </body>
 </html>
