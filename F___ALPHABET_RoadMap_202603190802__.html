@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>產品時程看板</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+/* ── Design tokens ── */
+:root {
+  --bg:      #0c0d0e;
+  --surf:    #161819;
+  --surf2:   #1e2123;
+  --bd:      rgba(255,255,255,.08);
+  --bd2:     rgba(255,255,255,.14);
+  --t1:      #edecea;
+  --t2:      #9a9890;
+  --t3:      #565452;
+  --green:   #4db86a;  --green-bg: rgba(77,184,106,.13);  --green-bd: rgba(77,184,106,.35);
+  --red:     #e05555;  --red-bg:   rgba(224,85,85,.13);   --red-bd:   rgba(224,85,85,.35);
+  --blue:    #4d9de0;  --blue-bg:  rgba(77,157,224,.13);  --blue-bd:  rgba(77,157,224,.35);
+  --grey:    #484644;  --grey-bg:  rgba(72,70,68,.18);    --grey-bd:  rgba(72,70,68,.3);
+  --law:     #5599dd;
+  --h5:      #44bb88;
+  --sab:     env(safe-area-inset-bottom, 0px);
+  /* Layout */
+  --pad:     12px;
+  --r-card:  10px;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { font-size: 14px; }
+body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; }
+
+/* ── Utility ── */
+.hidden { display: none !important; }
+
+/* ══════════════════════════════════════════
+   TOP BAR
+══════════════════════════════════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 60;
+  background: var(--surf);
+  border-bottom: 1px solid var(--bd2);
+  padding: 12px var(--pad) 10px;
+}
+.topbar-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(16px, 2.5vw, 24px);
+  letter-spacing: .12em; white-space: nowrap; flex-shrink: 0;
+}
+.brand em { font-family: 'Noto Sans TC', sans-serif; font-size: clamp(9px, 1.2vw, 12px); color: var(--t3); font-style: normal; font-weight: 400; letter-spacing: 0; margin-left: 8px; }
+
+.stats {
+  display: flex; gap: 6px; flex: 1; flex-wrap: wrap;
+}
+.sc {
+  background: var(--surf2); border-radius: 7px;
+  padding: 5px 12px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.sv { font-size: clamp(15px, 2vw, 20px); font-weight: 700; line-height: 1; }
+.sl { font-size: clamp(9px, 1vw, 11px); color: var(--t3); letter-spacing: .04em; }
+
+.clock { font-size: 11px; color: var(--t3); white-space: nowrap; margin-left: auto; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.live { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; vertical-align: middle; margin-right: 3px; }
+
+/* ══════════════════════════════════════════
+   TAB NAV  (visible on all sizes, style changes)
+══════════════════════════════════════════ */
+.tabnav {
+  background: var(--surf);
+  border-bottom: 1px solid var(--bd2);
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none; scrollbar-width: none;
+}
+.tabnav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0; scroll-snap-align: start;
+  padding: 10px 20px;
+  font-size: clamp(11px, 1.2vw, 13px); font-family: inherit; font-weight: 500;
+  color: var(--t3); background: none; border: none; border-bottom: 2px solid transparent;
+  cursor: pointer; white-space: nowrap; transition: all .15s;
+}
+.tab-btn.on { color: var(--t1); border-bottom-color: var(--t1); }
+
+/* ══════════════════════════════════════════
+   MAIN CONTENT
+══════════════════════════════════════════ */
+.content {
+  max-width: 1400px; margin: 0 auto;
+  padding: var(--pad);
+  padding-bottom: calc(var(--pad) + var(--sab));
+}
+
+.page { display: none; }
+.page.on { display: block; }
+
+/* ══════════════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════════════ */
+.sh { display: flex; align-items: center; gap: 8px; margin: 10px 0 10px; }
+.stag {
+  font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 4px; flex-shrink: 0;
+}
+.stag-law { background: rgba(85,153,221,.15); color: var(--law); }
+.stag-h5  { background: rgba(68,187,136,.15); color: var(--h5); }
+.sline { flex: 1; height: 1px; background: var(--bd); }
+
+/* ══════════════════════════════════════════
+   QUARTER GRID
+   mobile: horizontal scroll
+   ≥600px: 2-col grid
+   ≥900px: 4-col grid
+══════════════════════════════════════════ */
+.q-wrap { margin-bottom: 16px; }
+
+/* mobile: scroll */
+.q-scroll {
+  display: flex; gap: 8px;
+  overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px;
+  -ms-overflow-style: none; scrollbar-width: none;
+}
+.q-scroll::-webkit-scrollbar { display: none; }
+
+/* ≥600: switch to grid */
+@media (min-width: 600px) {
+  .q-scroll {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: visible; scroll-snap-type: none; padding-bottom: 0;
+  }
+}
+@media (min-width: 900px) {
+  .q-scroll { grid-template-columns: repeat(4, 1fr); }
+}
+
+.qc {
+  /* mobile: scroll card */
+  flex-shrink: 0; width: 74vw; max-width: 280px; scroll-snap-align: start;
+  border: 1px solid var(--bd); border-radius: var(--r-card); overflow: hidden; background: var(--surf);
+}
+@media (min-width: 600px) { .qc { width: auto; max-width: none; } }
+
+.qh {
+  padding: 7px 12px; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.qh-law { background: rgba(85,153,221,.08); color: var(--law); border-bottom: 1px solid rgba(85,153,221,.12); }
+.qh-h5  { background: rgba(68,187,136,.08); color: var(--h5);  border-bottom: 1px solid rgba(68,187,136,.12); }
+.qm { font-size: 9px; opacity: .55; font-weight: 400; }
+.qb { padding: 7px; display: flex; flex-direction: column; gap: 5px; }
+.q-empty { padding: 16px 8px; text-align: center; font-size: 11px; color: var(--t3); }
+
+/* ══════════════════════════════════════════
+   PRODUCT CHIP (inside quarter)
+══════════════════════════════════════════ */
+.chip {
+  border-radius: 7px; padding: 8px 10px;
+  border: 1px solid var(--grey-bd); background: var(--grey-bg);
+}
+.chip.st-on { border-color: var(--green-bd); background: var(--green-bg); }
+.chip.st-dl { border-color: var(--red-bd);   background: var(--red-bg); }
+.chip.st-ea { border-color: var(--blue-bd);  background: var(--blue-bg); }
+.chip-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+.chip-mo  { font-size: 9px; color: var(--t3); }
+.chip-st  { font-size: 9px; font-weight: 700; }
+.chip-nm  { font-size: clamp(11px, 1.3vw, 13px); font-weight: 700; line-height: 1.3; }
+.chip-pl  { font-size: 9px; opacity: .6; margin-top: 2px; }
+.chip-gm  { font-size: 9px; color: var(--t3); margin-top: 3px; line-height: 1.5; }
+.dots     { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+.dot      { width: 7px; height: 7px; border-radius: 50%; }
+
+/* ══════════════════════════════════════════
+   PRODUCT LIST
+   mobile: 1 col
+   ≥700px: 2 col
+   ≥1100px: 3 col
+══════════════════════════════════════════ */
+.prod-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 7px;
+}
+@media (min-width: 700px)  { .prod-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .prod-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.pi {
+  background: var(--surf); border: 1px solid var(--bd);
+  border-left: 3px solid var(--grey);
+  border-radius: var(--r-card); overflow: hidden; cursor: pointer;
+  display: flex; flex-direction: column;
+}
+.pi.st-on { border-left-color: var(--green); }
+.pi.st-dl { border-left-color: var(--red); }
+.pi.st-ea { border-left-color: var(--blue); }
+
+.pi-h { display: flex; align-items: center; gap: 10px; padding: 11px 13px; }
+.pi-info { flex: 1; min-width: 0; }
+.pi-nm { font-size: clamp(12px, 1.3vw, 14px); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pi-sub { font-size: 10px; color: var(--t3); margin-top: 2px; }
+.pi-bd { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; flex-shrink: 0; }
+.bd-on { background: var(--green-bg); color: var(--green); }
+.bd-dl { background: var(--red-bg);   color: var(--red); }
+.bd-ea { background: var(--blue-bg);  color: var(--blue); }
+.bd-no { background: var(--grey-bg);  color: var(--t3); }
+.pi-ar { font-size: 10px; color: var(--t3); flex-shrink: 0; transition: transform .2s; }
+.pi-ar.op { transform: rotate(90deg); }
+
+.pi-det {
+  display: none; border-top: 1px solid var(--bd);
+  padding: 11px 13px; background: var(--surf2); flex: 1;
+}
+.pi-det.op { display: block; }
+.dg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px; margin-bottom: 6px;
+}
+@media (min-width: 480px) { .dg { grid-template-columns: repeat(6, 1fr); } }
+@media (min-width: 700px) { .dg { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 900px) { .dg { grid-template-columns: repeat(6, 1fr); } }
+
+.db { border: 1px solid var(--bd); border-radius: 7px; padding: 6px 8px; }
+.db.st-on { border-color: var(--green-bd); background: var(--green-bg); }
+.db.st-dl { border-color: var(--red-bd);   background: var(--red-bg); }
+.db.st-ea { border-color: var(--blue-bd);  background: var(--blue-bg); }
+.db-l { font-size: 9px; font-weight: 700; color: var(--t3); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 2px; }
+.db-r { font-size: 10px; color: var(--t2); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-s { font-size: 11px; font-weight: 700; }
+
+/* ══════════════════════════════════════════
+   OVERVIEW: side-by-side on large screen
+══════════════════════════════════════════ */
+.overview-panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 900px) {
+  .overview-panels {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+/* ══════════════════════════════════════════
+   FILTER ROW
+══════════════════════════════════════════ */
+.fr { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; -ms-overflow-style: none; scrollbar-width: none; }
+.fr::-webkit-scrollbar { display: none; }
+.fc {
+  flex-shrink: 0; font-size: 11px; padding: 5px 12px; border-radius: 20px;
+  border: 1px solid var(--bd2); background: transparent; color: var(--t3);
+  cursor: pointer; font-family: inherit; transition: all .15s;
+}
+.fc.on { background: var(--t1); color: var(--bg); border-color: var(--t1); }
+
+/* ══════════════════════════════════════════
+   LEGEND ROW (shown on larger screens)
+══════════════════════════════════════════ */
+.legend {
+  display: none;
+  gap: 14px; align-items: center; flex-wrap: wrap;
+  font-size: 11px; color: var(--t3);
+  padding: 8px var(--pad);
+  border-bottom: 1px solid var(--bd);
+  background: var(--surf);
+  max-width: 100%;
+}
+@media (min-width: 600px) { .legend { display: flex; } }
+.leg { display: flex; align-items: center; gap: 5px; }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; }
+.leg-sq  { width: 8px; height: 8px; border-radius: 2px; }
+.leg-div { width: 1px; height: 14px; background: var(--bd2); }
+.leg-note { font-size: 10px; margin-left: auto; }
+</style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">PRODUCT ROADMAP <em>產品時程看板</em></div>
+    <div class="stats" id="stats"></div>
+    <div class="clock" id="clk"></div>
+  </div>
+</div>
+
+<!-- ── Legend (tablet+) ── -->
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>如期</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>延期</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--blue)"></div>提早</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--grey)"></div>未設定</div>
+  <div class="leg-div"></div>
+  <div class="leg"><div class="leg-sq" style="background:rgba(85,153,221,.3)"></div>法規 D27</div>
+  <div class="leg"><div class="leg-sq" style="background:rgba(85,153,221,.15)"></div>法規 APOLLO</div>
+  <div class="leg"><div class="leg-sq" style="background:rgba(68,187,136,.25)"></div>H5 主流</div>
+  <div class="leg"><div class="leg-sq" style="background:rgba(68,187,136,.12)"></div>H5 彩金</div>
+  <div class="leg-div"></div>
+  <div class="leg" style="font-size:10px">各產品下方圓點 = 六維度狀態</div>
+  <div class="leg-note"><span class="live"></span><span id="updated">更新中…</span></div>
+</div>
+
+<!-- ── Tab Nav ── -->
+<nav class="tabnav">
+  <button class="tab-btn on" onclick="go(0)" id="t0">📅 總覽</button>
+  <button class="tab-btn" onclick="go(1)" id="t1">⚖️ 法規遊戲</button>
+  <button class="tab-btn" onclick="go(2)" id="t2">📱 H5 遊戲</button>
+  <button class="tab-btn" onclick="go(3)" id="t3">📋 全部產品</button>
+</nav>
+
+<!-- ── Pages ── -->
+<div class="content">
+  <div class="page on" id="p0"></div>
+  <div class="page" id="p1"></div>
+  <div class="page" id="p2"></div>
+  <div class="page" id="p3"></div>
+</div>
+
+<script>
+/* ── Data ── */
+const DIMS = [
+  {key:'planning',l:'企劃',s:'企'},{key:'math',l:'機率',s:'機'},
+  {key:'art',l:'美術',s:'美'},{key:'program',l:'程式',s:'程'},
+  {key:'qa',l:'品保',s:'保'},{key:'cert',l:'送驗',s:'驗'},
+];
+
+const LAW = [
+  {id:'l16', yr:2025,mo:5,  pl:'D27',    nm:'滿意發',  la:'2025/11月', gm:['好運財神','金龍迎財','榮華富貴','金獅納福']},
+  {id:'l21', yr:2025,mo:8,  pl:'D27',    nm:'龍來發',  la:'2025/12月', gm:['金凰飛舞','金龍呈祥','熊貓當家','花好月圓']},
+  {id:'l26', yr:2025,mo:10, pl:'D27',    nm:'金來發',  la:'2025/12月', gm:['皇朝盛世','皇朝美人','金龍獻寶','金鳳展翅']},
+  {id:'l31', yr:2026,mo:1,  pl:'D27',    nm:'金龍發',  la:'',          gm:['金富財神','吉祥公主','金海龍王','金猴獻瑞']},
+  {id:'l36', yr:2026,mo:4,  pl:'D27',    nm:'福來發',  la:'',          gm:['龍來發財','鳳來富貴','金將熊貓','財源滾滾']},
+  {id:'l41', yr:2026,mo:8,  pl:'APOLLO', nm:'好運發',  la:'',          gm:['滿運金龍','幸運金鳳','福將到來','金玉佳人']},
+  {id:'l99', yr:2026,mo:11, pl:'APOLLO', nm:'轉轉發',  la:'',          gm:['財神賜福','金龍寶庫','富貴女將','福運金豬']},
+];
+const H5 = [
+  {id:'h116',yr:2025,mo:12,ty:'彩金',nm:'滿意發系列',         la:'',        gm:['好運財神','金龍迎財','榮華富貴','金獅納福']},
+  {id:'h202',yr:2026,mo:2, ty:'主流',nm:'Super Chess 王牌棋士',la:'2026/2月',gm:[]},
+  {id:'h203',yr:2026,mo:3, ty:'彩金',nm:'金來發·皇朝盛世',    la:'2026/3月',gm:[]},
+  {id:'h204',yr:2026,mo:4, ty:'彩金',nm:'金來發·皇朝美人',    la:'2026/4月',gm:[]},
+  {id:'h205',yr:2026,mo:5, ty:'主流',nm:'Sugar Pop 糖果派對',  la:'2026/5月',gm:[]},
+  {id:'h206',yr:2026,mo:6, ty:'彩金',nm:'龍來發·花好月圓',    la:'2026/6月',gm:[]},
+  {id:'h207',yr:2026,mo:7, ty:'主流',nm:"Witch's Magic 小魔女",la:'2026/7月',gm:[]},
+  {id:'h208',yr:2026,mo:8, ty:'彩金',nm:'龍來發·金鳳飛舞',    la:'2026/8月',gm:[]},
+  {id:'h209',yr:2026,mo:9, ty:'彩金',nm:'金龍發·金海龍王',    la:'2026/9月',gm:[]},
+  {id:'h210',yr:2026,mo:10,ty:'主流',nm:'Funky APE 放克猿',    la:'2026/10月',gm:[]},
+  {id:'h211',yr:2026,mo:11,ty:'彩金',nm:'金龍發·金猴獻瑞',    la:'2026/11月',gm:[]},
+  {id:'h212',yr:2026,mo:12,ty:'彩金',nm:'福來發·財源滾滾',    la:'2026/12月',gm:[]},
+];
+const RAW = {
+  l16:{planning:'完成',math:'完成',art:'完成',program:'完成',qa:'完成',cert:'6月拿到Letter'},
+  l21:{planning:'完成',math:'完成',art:'完成',program:'完成',qa:'GLI測試修改',cert:'10月拿Letter'},
+  l26:{planning:'完成',math:'完成',art:'完成',program:'完成',qa:'測試進行中',cert:'9月送GLI'},
+  l31:{planning:'製作中',math:'製作中',art:'製作中',program:'製作中',qa:'尚未開始',cert:''},
+  l36:{planning:'製作中',math:'製作中',art:'完成',program:'製作中',qa:'尚未開始',cert:''},
+  l41:{planning:'製作中',math:'製作中',art:'製作中',program:'尚未開始',qa:'尚未開始',cert:''},
+  l99:{planning:'尚未開始',math:'尚未開始',art:'尚未開始',program:'尚未開始',qa:'尚未開始',cert:''},
+  h116:{planning:'完成',math:'完成',art:'完成',program:'完成',qa:'完成',cert:''},
+  h202:{planning:'完成',math:'完成',art:'製作中',program:'製作中',qa:'尚未開始',cert:''},
+  h203:{planning:'完成',math:'完成',art:'完成',program:'完成',qa:'測試進行中',cert:''},
+  h204:{planning:'完成',math:'調整中',art:'完成',program:'完成',qa:'測試進行中',cert:''},
+  h205:{planning:'製作中',math:'製作中',art:'製作中',program:'尚未開始',qa:'尚未開始',cert:''},
+  h206:{planning:'完成',math:'N/A',art:'完成',program:'完成',qa:'GLI測試修改',cert:''},
+  h207:{planning:'製作中',math:'製作中',art:'製作中',program:'尚未開始',qa:'尚未開始',cert:''},
+  h208:{planning:'完成',math:'N/A',art:'完成',program:'完成',qa:'GLI測試修改',cert:''},
+  h209:{planning:'N/A',math:'N/A',art:'完成',program:'尚未開始',qa:'尚未開始',cert:''},
+  h210:{planning:'製作中',math:'製作中',art:'製作中',program:'尚未開始',qa:'尚未開始',cert:''},
+  h211:{planning:'N/A',math:'N/A',art:'完成',program:'尚未開始',qa:'尚未開始',cert:''},
+  h212:{planning:'N/A',math:'N/A',art:'完成',program:'尚未開始',qa:'尚未開始',cert:''},
+};
+const ALL = [...LAW, ...H5];
+const SK = 'roadmap_status_v1';
+let curTab = 0, flt = 'all', openSet = new Set();
+
+/* ── State helpers ── */
+function lst() { try { return JSON.parse(localStorage.getItem(SK)) || {}; } catch { return {}; } }
+
+function ov(id, st) {
+  const v = DIMS.map(d => (st[id]||{})[d.key]||'');
+  if (v.every(x=>x==='')) return 'none';
+  if (v.some(x=>x==='delayed')) return 'delayed';
+  if (v.some(x=>x==='early'))   return 'early';
+  return 'on-time';
+}
+
+const S = {
+  color:  { 'on-time':'var(--green)', delayed:'var(--red)', early:'var(--blue)', none:'var(--grey)' },
+  cls:    { 'on-time':'st-on',        delayed:'st-dl',      early:'st-ea',       none:'' },
+  bdcls:  { 'on-time':'bd-on',        delayed:'bd-dl',      early:'bd-ea',       none:'bd-no' },
+  label:  { 'on-time':'如期',          delayed:'延期',        early:'提早',         none:'未設定' },
+};
+function dbcls(v) { return {'on-time':'st-on','delayed':'st-dl','early':'st-ea'}[v]||''; }
+
+/* ── HTML builders ── */
+function dotRow(id, st) {
+  return DIMS.map(d => {
+    const v = (st[id]||{})[d.key]||'';
+    return `<div class="dot" style="background:${S.color[v||'none']}" title="${d.l}：${S.label[v||'none']}"></div>`;
+  }).join('');
+}
+
+function buildQSec(data, qhcls, ac) {
+  const st = lst(), map = {};
+  data.forEach(p => {
+    const k = `${p.yr}-Q${Math.ceil(p.mo/3)}`;
+    if (!map[k]) map[k] = { yr:p.yr, q:`Q${Math.ceil(p.mo/3)}`, items:[] };
+    map[k].items.push(p);
+  });
+  const ql = {Q1:'1–3月',Q2:'4–6月',Q3:'7–9月',Q4:'10–12月'};
+  return `<div class="q-wrap"><div class="q-scroll">${
+    Object.values(map).sort((a,b)=>a.yr===b.yr?a.q.localeCompare(b.q):a.yr-b.yr).map(({yr,q,items})=>`
+      <div class="qc">
+        <div class="qh ${qhcls}"><span>${yr} ${q}</span><span class="qm">${ql[q]}</span></div>
+        <div class="qb">${items.map(p=>{
+          const o=ov(p.id,st);
+          return `<div class="chip ${S.cls[o]}">
+            <div class="chip-top">
+              <span class="chip-mo">${p.mo}月出測</span>
+              ${o!=='none'?`<span class="chip-st" style="color:${S.color[o]}">${S.label[o]}</span>`:''}
+            </div>
+            <div class="chip-nm">${p.nm}</div>
+            <div class="chip-pl" style="color:${ac}">${p.pl||p.ty||''}</div>
+            ${p.gm.length?`<div class="chip-gm">${p.gm.join('・')}</div>`:''}
+            <div class="dots">${dotRow(p.id,st)}</div>
+          </div>`;
+        }).join('')}</div>
+      </div>`).join('')
+  }</div></div>`;
+}
+
+function buildProdList(data) {
+  const st = lst();
+  let list = flt === 'all' ? data : data.filter(p => ov(p.id,st) === flt);
+  if (!list.length) return `<div style="text-align:center;padding:40px 0;color:var(--t3);font-size:13px">沒有符合條件的產品</div>`;
+  return `<div class="prod-grid">${list.map(p=>{
+    const o=ov(p.id,st), op=openSet.has(p.id), rw=RAW[p.id]||{};
+    const dbs = DIMS.map(d=>{
+      const sv=(st[p.id]||{})[d.key]||'';
+      return `<div class="db ${dbcls(sv)}">
+        <div class="db-l">${d.s}</div>
+        <div class="db-r">${rw[d.key]||'—'}</div>
+        <div class="db-s" style="color:${S.color[sv||'none']}">${S.label[sv||'none']}</div>
+      </div>`;
+    }).join('');
+    return `<div class="pi ${S.cls[o]}">
+      <div class="pi-h" onclick="tog('${p.id}')">
+        <div class="pi-info">
+          <div class="pi-nm">${p.nm}</div>
+          <div class="pi-sub">${p.pl||p.ty||''}${p.la?' · '+p.la:''}</div>
+        </div>
+        <span class="pi-bd ${S.bdcls[o]}">${S.label[o]}</span>
+        <span class="pi-ar ${op?'op':''}">▶</span>
+      </div>
+      <div class="pi-det ${op?'op':''}">
+        <div class="dg">${dbs}</div>
+        ${p.gm.length?`<div style="font-size:10px;color:var(--t3);margin-top:4px">子遊戲：${p.gm.join('、')}</div>`:''}
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function filterBar(data) {
+  const st = lst();
+  const cnt = {};
+  data.forEach(p => { const s=ov(p.id,st); cnt[s]=(cnt[s]||0)+1; });
+  const all = data.length;
+  return `<div class="fr">
+    <button class="fc ${flt==='all'?'on':''}" onclick="sf('all')">全部 ${all}</button>
+    <button class="fc ${flt==='on-time'?'on':''}" onclick="sf('on-time')">如期 ${cnt['on-time']||0}</button>
+    <button class="fc ${flt==='delayed'?'on':''}" onclick="sf('delayed')">延期 ${cnt.delayed||0}</button>
+    <button class="fc ${flt==='early'?'on':''}" onclick="sf('early')">提早 ${cnt.early||0}</button>
+    <button class="fc ${flt==='none'?'on':''}" onclick="sf('none')">未設定 ${cnt.none||0}</button>
+  </div>`;
+}
+
+/* ── Render ── */
+function render() {
+  const st = lst();
+  const c = {total:ALL.length,'on-time':0,delayed:0,early:0,none:0};
+  ALL.forEach(p => { const s=ov(p.id,st); if(c[s]!==undefined) c[s]++; });
+
+  // Stats bar
+  document.getElementById('stats').innerHTML = [
+    {v:c.total,       l:'總計',  col:'var(--t1)'},
+    {v:c['on-time'],  l:'如期',  col:'var(--green)'},
+    {v:c.delayed,     l:'延期',  col:'var(--red)'},
+    {v:c.early,       l:'提早',  col:'var(--blue)'},
+  ].map(s=>`<div class="sc">
+    <div class="sv" style="color:${s.col}">${s.v}</div>
+    <div class="sl">${s.l}</div>
+  </div>`).join('');
+
+  // Page 0: Overview — two panels side by side on large screen
+  document.getElementById('p0').innerHTML = `
+    <div class="overview-panels">
+      <div>
+        <div class="sh"><span class="stag stag-law">法規遊戲</span><div class="sline"></div></div>
+        ${buildQSec(LAW,'qh-law','var(--law)')}
+      </div>
+      <div>
+        <div class="sh"><span class="stag stag-h5">H5 遊戲</span><div class="sline"></div></div>
+        ${buildQSec(H5,'qh-h5','var(--h5)')}
+      </div>
+    </div>`;
+
+  // Page 1: Law
+  document.getElementById('p1').innerHTML = `
+    <div class="sh"><span class="stag stag-law">法規遊戲 · 季度時程</span><div class="sline"></div></div>
+    ${buildQSec(LAW,'qh-law','var(--law)')}
+    <div class="sh" style="margin-top:6px"><span class="stag stag-law">法規遊戲 · 產品列表</span><div class="sline"></div></div>
+    ${filterBar(LAW)}
+    ${buildProdList(LAW)}`;
+
+  // Page 2: H5
+  document.getElementById('p2').innerHTML = `
+    <div class="sh"><span class="stag stag-h5">H5 遊戲 · 季度時程</span><div class="sline"></div></div>
+    ${buildQSec(H5,'qh-h5','var(--h5)')}
+    <div class="sh" style="margin-top:6px"><span class="stag stag-h5">H5 遊戲 · 產品列表</span><div class="sline"></div></div>
+    ${filterBar(H5)}
+    ${buildProdList(H5)}`;
+
+  // Page 3: All products
+  document.getElementById('p3').innerHTML = `
+    <div class="sh"><span class="stag stag-law" style="color:var(--t2);background:var(--surf2)">全部產品</span><div class="sline"></div></div>
+    ${filterBar(ALL)}
+    ${buildProdList(ALL)}`;
+
+  // Updated time
+  const el = document.getElementById('updated');
+  if (el) el.textContent = '更新 ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+
+/* ── Event handlers ── */
+window.go = function(i) {
+  curTab = i;
+  document.querySelectorAll('.page').forEach((p,j)=>p.classList.toggle('on', j===i));
+  document.querySelectorAll('.tab-btn').forEach((b,j)=>b.classList.toggle('on', j===i));
+};
+window.tog = function(id) {
+  if (openSet.has(id)) openSet.delete(id); else openSet.add(id);
+  render();
+};
+window.sf = function(s) { flt = s; render(); };
+
+function tick() {
+  const el = document.getElementById('clk');
+  if (el) el.innerHTML = `<span class="live"></span>${new Date().toLocaleString('zh-TW',{month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit'})}`;
+}
+
+render(); tick();
+
+// 同裝置不同分頁：後台儲存時立即更新
+window.addEventListener('storage', function(e) {
+  if (e.key === SK) render();
+});
+
+setInterval(render, 5000);
+setInterval(tick, 10000);
+</script>
+</body>
+</html>
