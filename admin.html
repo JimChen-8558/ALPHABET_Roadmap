@@ -215,23 +215,28 @@ function setSyncStatus(state) {
 
 // ── Real-time listening ──
 function startListening() {
-  // 追蹤使用者是否正在操作
-  let userActive = false;
-  let activeTimer = null;
-  document.addEventListener('focusin',  () => { userActive = true;  clearTimeout(activeTimer); });
-  document.addEventListener('input',    () => { userActive = true;  clearTimeout(activeTimer); });
-  document.addEventListener('focusout', () => { activeTimer = setTimeout(() => { userActive = false; }, 1500); });
+  // 嚴格追蹤：只要任何 input/textarea/select 有 focus，就完全不 render
+  function isEditing() {
+    const el = document.activeElement;
+    if (!el) return false;
+    const tag = el.tagName.toLowerCase();
+    return tag === 'input' || tag === 'textarea' || tag === 'select';
+  }
 
   setInterval(async () => {
-    // 使用者正在操作中，跳過這次渲染
-    if (userActive) return;
     try {
       const d = await fbGet('');
       if (d !== null) {
-        if (d.status) fbStatus = d.status;
-        if (d.sections) fbSections = d.sections;
+        // 只更新資料，不 render
+        let changed = false;
+        if (d.status)   { fbStatus = d.status;     changed = true; }
+        if (d.sections) { fbSections = d.sections;  changed = true; }
         setSyncStatus('live');
-        render();
+
+        // 只有沒有任何欄位在編輯中才 render
+        if (changed && !isEditing()) {
+          render();
+        }
       }
     } catch(e) {
       setSyncStatus('err');
