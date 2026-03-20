@@ -172,11 +172,10 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 .q-wrap { margin-bottom: 16px; }
 .q-scroll {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2,1fr);
   gap: 8px;
 }
-@media(min-width: 600px)  { .q-scroll { grid-template-columns: repeat(2,1fr); } }
-@media(min-width: 900px)  { .q-scroll { grid-template-columns: repeat(4,1fr); } }
+@media(min-width: 600px)  { .q-scroll { grid-template-columns: repeat(4,1fr); } }
 
 .qc {
   width: 100%; max-width: none; scroll-snap-align: unset;
