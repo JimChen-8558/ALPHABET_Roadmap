@@ -579,7 +579,7 @@ function buildQSec(products, qhcls, ac) {
               <span class="chip-mo">${(fbData[p.id]&&fbData[p.id]._month)||p.mo+'月'}出測</span>
               ${o!=='none'?`<span class="chip-st" style="color:${S.color[o]}">${S.label[o]}</span>`:''}
             </div>
-            <div class="chip-nm">${p.nm}</div>
+            <div class="chip-nm">${(fbData[p.id]&&fbData[p.id]._name)||p.nm}</div>
             <div class="chip-pl" style="color:${ac}">${p.pl||''}</div>
             ${p.gm&&p.gm.length?`
             <div class="chip-gm-toggle" onclick="event.stopPropagation();toggleGm(this)">
@@ -614,7 +614,7 @@ function buildProdList(products) {
     return `<div class="pi ${S.cls[o]}" style="animation-delay:${idx*30}ms">
       <div class="pi-h" onclick="tog('${p.id}')">
         <div class="pi-info">
-          <div class="pi-nm">${p.nm}</div>
+          <div class="pi-nm">${(fbData[p.id]&&fbData[p.id]._name)||p.nm}</div>
           <div class="pi-sub">
             <span class="pi-sub-tag">${p.pl||''}</span>
             ${((fbData[p.id]&&fbData[p.id]._launch)||p.la)?`<span>${(fbData[p.id]&&fbData[p.id]._launch)||p.la}</span>`:''}

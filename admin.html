@@ -317,6 +317,13 @@ function render() {
         </div>
         <div class="card-body ${isOpen?'op':''}" id="body-${p.id}" onclick="event.stopPropagation()">
           <div class="dim-grid">${dims}</div>
+          <div class="time-item" style="margin-bottom:8px">
+            <div class="time-lbl">遊戲名稱</div>
+            <input class="time-inp" type="text" placeholder="例：(D27) 金龍發"
+              value="${pst._name !== undefined ? pst._name : (p.nm||p.name||'')}"
+              onchange="setTime('${p.id}','_name',this.value)"
+              onclick="event.stopPropagation()">
+          </div>
           <div class="time-row">
             <div class="time-item">
               <div class="time-lbl">出測月份</div>
