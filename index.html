@@ -210,7 +210,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: va
 .chip-mo   { font-size: 10px; color: var(--t2); letter-spacing: .03em; }
 .chip-st   { font-size: 10px; font-weight: 700; letter-spacing: .04em; }
 .chip-nm   { font-size: clamp(13px, 1.3vw, 14px); font-weight: 700; line-height: 1.35; }
-.chip-pl   { font-size: 10px; opacity: .8; margin-top: 2px; letter-spacing: .03em; }
+.chip-pl   { font-size: 10px; opacity: .8; margin-top: 2px; letter-spacing: .03em; white-space: nowrap; }
 .chip-gm   { font-size: 10px; color: var(--t2); margin-top: 4px; line-height: 1.6; }
 
 /* Six-dim dots */
@@ -580,7 +580,7 @@ function buildQSec(products, qhcls, ac) {
               ${o!=='none'?`<span class="chip-st" style="color:${S.color[o]}">${S.label[o]}</span>`:''}
             </div>
             <div class="chip-nm">${(fbData[p.id]&&fbData[p.id]._name)||p.nm}</div>
-            <div class="chip-pl" style="color:${ac}">${p.pl||''}</div>
+            ${((fbData[p.id]&&fbData[p.id]._launch)||p.la)?`<div class="chip-pl" style="color:${ac}">預計：${(fbData[p.id]&&fbData[p.id]._launch)||p.la} 上市</div>`:''}
             ${p.gm&&p.gm.length?`
             <div class="chip-gm-toggle" onclick="event.stopPropagation();toggleGm(this)">
               <span class="arrow">▶</span><span>${p.gm.length} 款子遊戲</span>
@@ -616,8 +616,7 @@ function buildProdList(products) {
         <div class="pi-info">
           <div class="pi-nm">${(fbData[p.id]&&fbData[p.id]._name)||p.nm}</div>
           <div class="pi-sub">
-            <span class="pi-sub-tag">${p.pl||''}</span>
-            ${((fbData[p.id]&&fbData[p.id]._launch)||p.la)?`<span>${(fbData[p.id]&&fbData[p.id]._launch)||p.la}</span>`:''}
+            ${((fbData[p.id]&&fbData[p.id]._launch)||p.la)?`<span>預計：${(fbData[p.id]&&fbData[p.id]._launch)||p.la} 上市</span>`:''}
           </div>
         </div>
         <span class="pi-bd ${S.bdcls[o]}">${S.label[o]}</span>
