@@ -100,9 +100,54 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 60px}
 .time-lbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
 .time-inp{width:100%;font-size:12px;padding:6px 8px;border:1px solid var(--bd2);border-radius:6px;background:var(--surf);color:var(--text);font-family:inherit}
 .time-inp:focus{outline:none;border-color:var(--accent)}
+
+#pw-screen{
+  position:fixed;inset:0;z-index:999;
+  background:#0a0a0b;
+  display:flex;align-items:center;justify-content:center;
+}
+.pw-box{
+  background:#161819;border:1px solid rgba(201,168,76,.3);border-radius:14px;
+  padding:36px 32px;width:320px;max-width:90vw;text-align:center;
+}
+.pw-logo{
+  font-family:'Noto Sans TC',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:#c9a84c;margin-bottom:6px;
+}
+.pw-title{font-size:16px;font-weight:700;color:#f0eeea;margin-bottom:4px}
+.pw-sub{font-size:12px;color:#565452;margin-bottom:24px}
+.pw-inp{
+  width:100%;font-size:14px;padding:10px 14px;
+  border:1px solid rgba(255,255,255,.12);border-radius:8px;
+  background:#1f2123;color:#f0eeea;font-family:inherit;
+  text-align:center;letter-spacing:.1em;margin-bottom:12px;
+  outline:none;transition:border-color .2s;
+}
+.pw-inp:focus{border-color:#c9a84c;}
+.pw-btn{
+  width:100%;padding:10px;border-radius:8px;border:none;
+  background:linear-gradient(135deg,#c9a84c,#e8c46a);
+  color:#0a0a0b;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;letter-spacing:.06em;transition:opacity .15s;
+}
+.pw-btn:hover{opacity:.85}
+.pw-err{font-size:12px;color:#e85d5d;margin-top:8px;min-height:18px}
 </style>
 </head>
 <body>
+
+<div id="pw-screen">
+  <div class="pw-box">
+    <div class="pw-logo">ALPHABET ROADMAP</div>
+    <div class="pw-title">後台管理</div>
+    <div class="pw-sub">請輸入密碼以繼續</div>
+    <input class="pw-inp" type="password" id="pw-inp" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">進入</button>
+    <div class="pw-err" id="pw-err"></div>
+  </div>
+</div>
 
 <header>
   <div class="logo">產品狀態管理 <span>後台</span></div>
@@ -508,6 +553,37 @@ async function init() {
 }
 
 init();
+
+// ── Password ──
+const PW_KEY = 'roadmap_admin_auth';
+const CORRECT = 'alpha.net';
+
+function checkPw() {
+  const val = document.getElementById('pw-inp').value;
+  if (val === CORRECT) {
+    sessionStorage.setItem(PW_KEY, '1');
+    document.getElementById('pw-screen').style.display = 'none';
+  } else {
+    const err = document.getElementById('pw-err');
+    err.textContent = '密碼錯誤，請再試一次';
+    document.getElementById('pw-inp').value = '';
+    document.getElementById('pw-inp').focus();
+    setTimeout(() => { err.textContent = ''; }, 3000);
+  }
+}
+
+// Check on load
+(function() {
+  if (sessionStorage.getItem(PW_KEY) === '1') {
+    document.getElementById('pw-screen').style.display = 'none';
+  } else {
+    // Delay focus so page renders first
+    setTimeout(() => {
+      const inp = document.getElementById('pw-inp');
+      if (inp) inp.focus();
+    }, 100);
+  }
+})();
 </script>
 </body>
 </html>
